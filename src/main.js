@@ -83,6 +83,11 @@ try {
   document.addEventListener('visibilitychange', () => animation.resetClock());
   animationId = requestAnimationFrame(draw);
   const bindings = [
+    ['water-opacity', settings.water, 'opacity', 2],
+    ['water-roughness', settings.water, 'roughness', 2],
+    ['water-fresnel', settings.water, 'fresnelStrength', 2],
+    ['water-reflection', settings.water, 'reflectionStrength', 2],
+    ['water-depth-tint', settings.water, 'depthTint', 2],
     ['light', settings.lighting, 'intensity', 2],
     ['speed', settings.water, 'speed', 2],
     ['waves', settings.water, 'strength', 2],
@@ -192,6 +197,7 @@ try {
   });
   function sync() {
     syncTime();
+    document.querySelector('#water-color').value = settings.water.color;
     waterCorrection.value = settings.water.colorCorrection;
     for (const [id, object, key, precision] of bindings) {
       document.getElementById(id).value = object[key];
@@ -209,6 +215,7 @@ try {
     useCustomSky(); settings.sky.zenith = event.target.value; sync();
   });
   document.querySelector('#fog-color').addEventListener('input', event => { settings.fog.color = event.target.value; sync(); });
+  document.querySelector('#water-color').addEventListener('input', event => { settings.water.color = event.target.value; sync(); });
   document.querySelector('#reset').onclick = () => {
     Object.assign(settings.camera, structuredClone(defaults.camera));
     customCamera = structuredClone(defaults.camera);

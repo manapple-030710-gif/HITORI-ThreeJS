@@ -13,7 +13,7 @@ export const imageColorDepth = {
 // 水面の見た目だけを調整。波の変位・速度・再生状態には触れません。
 const waterAppearance = {
   capillarySlope: 0.026,
-  bedBrightness: 0.84,
+  bedBrightness: 0.88,
   opticalDepth: 0.75,
   bedVariation: 0.025,
 };
@@ -28,6 +28,10 @@ export function createWater(uniforms) {
       uniform float uTime;
       uniform float uStrength;
       uniform float uRoughness;
+      uniform float uWaterOpacity;
+      uniform float uFresnelStrength;
+      uniform float uReflectionStrength;
+      uniform float uDepthTint;
       uniform float uFogStart;
       uniform float uHorizonBlendWidth;
       uniform vec3 uWaterColor;
@@ -125,17 +129,21 @@ export function createWater(uniforms) {
         // 微細な法線の平均化をFresnelにも反映し、白い反射の張り付きを抑えます。
         float fresnelView=mix(nv,sqrt(nv),roughness*0.35);
         float fresnel=0.0204+0.9796*pow(1.0-fresnelView,5.0);
+        fresnel=clamp(fresnel*uFresnelStrength,0.0,1.0);
         // 浅い水層を通った水底光を近似。背景を透かすアルファには依存しません。
         vec3 waterTint=mix(uBaseWaterColor,uWaterColor,imageWeight);
         vec3 lightTint=mix(uBaseLightColor,uEnvironmentLight,imageWeight);
         float refractedCos=sqrt(1.0-(1.0-nv*nv)/(1.333*1.333));
         float layerDepth=${waterAppearance.opticalDepth}+0.18*(broad.x-0.5)*uStrength;
-        vec3 transmission=exp(-vec3(0.20,0.145,0.12)*layerDepth/max(refractedCos,0.5));
+        vec3 transmission=exp(-vec3(0.20,0.145,0.12)*layerDepth*uDepthTint/max(refractedCos,0.5));
         float bedDetail=(broad.x-0.5)*${waterAppearance.bedVariation}*detailFade*uStrength;
         vec3 bed=waterTint*(${waterAppearance.bedBrightness}+bedDetail);
         vec3 transmitted=(bed*transmission+waterTint*0.16*(vec3(1.0)-transmission))
           *lightTint*uEnvironmentIntensity;
-        vec3 color=mix(transmitted,reflection,fresnel);
+        // 法線・波は変えず、材質の反射寄与だけ調整。遠方の反射を控えめに。
+        float reflectionFade=mix(1.0,0.78,smoothstep(35.0,180.0,distanceToCamera));
+        float reflectionWeight=clamp(fresnel*uReflectionStrength*reflectionFade,0.0,1.0);
+        vec3 color=mix(transmitted,reflection,reflectionWeight);
         // 水面のみ、自動補正の後・距離霧の前に微調整。霧や空の色は変えません。
         if (uWaterCorrectionMode == 1.0) {
           float gray=dot(color,vec3(0.2126,0.7152,0.0722));
@@ -165,7 +173,7 @@ export function createWater(uniforms) {
           boundaryAlpha=1.0-edgeBlend*smoothstep(60.0,180.0,distanceToCamera);
         }
         // 近景だけ実際の底面を透かす。反射・距離霧が強いほど透過を抑えます。
-        float bottomVisibility=0.60*(1.0-fresnel)*(1.0-fogAmount)
+        float bottomVisibility=(1.0-uWaterOpacity)*(1.0-reflectionWeight)*(1.0-fogAmount)
           *(1.0-smoothstep(18.0,60.0,distanceToCamera));
         gl_FragColor=vec4(color,boundaryAlpha*(1.0-bottomVisibility));
         #include <tonemapping_fragment>

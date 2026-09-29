@@ -11,11 +11,16 @@ export const defaults = {
   // 弱い不規則なうねりと、近景で見える中小波を重ねます。
   // amplitudeはワールド単位、wavelengthは基準波長。speedは既存UIでも変更可能。
   water: {
-  color: '#cdd1cd',
+  color: '#d8e0e2',
   colorCorrection: 'none',
   speed: 0.7,
   strength: 0.75,
-  roughness: 0.34,
+  roughness: 0.30,
+  // 材質のみ。opacityは近景の不透明度、depthTintは浅い吸収の強さ。
+  opacity: 0.35,
+  fresnelStrength: 1.05,
+  reflectionStrength: 0.92,
+  depthTint: 0.75,
   amplitude: 0.09,
   wavelength: 12
 },
