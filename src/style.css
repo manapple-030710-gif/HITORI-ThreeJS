@@ -3,3 +3,18 @@
 
 
 #animation-diagnostics{position:fixed;left:24px;bottom:76px;z-index:10;margin:0;padding:12px 16px;background:#14201de8;color:#e5ffee;font:12px/1.6 Consolas,monospace;pointer-events:none;white-space:pre;border:1px solid #ffffff50;border-radius:3px}
+aside{max-height:calc(100dvh - 120px);overflow-y:auto;scrollbar-width:thin}
+.controls select{display:block;width:100%;margin-top:10px;padding:7px;color:inherit;font:inherit;background:#f3f4ef;border:1px solid #78837d35;border-radius:2px}
+#choose-sky-image{width:100%}
+.controls #sky-image-status,.controls #auto-link-note{margin:8px 0;line-height:1.6;letter-spacing:0;overflow-wrap:anywhere}
+.auto-link{margin:12px 0 0;display:flex;align-items:center;gap:6px}
+.auto-link input{accent-color:#737f79}
+.advanced-settings{margin-top:18px;background:none;border:0;border-top:1px solid #78837d35;backdrop-filter:none}
+.advanced-settings summary{padding:14px 0}
+.advanced-settings label{margin-top:12px}
+.controls select:focus-visible{outline:2px solid #66796f;outline-offset:3px}
+#sky-color:disabled{opacity:.35;cursor:not-allowed}
+#camera-custom label{display:flex;align-items:center;justify-content:space-between;gap:8px}
+#camera-custom input{width:96px;padding:6px;color:inherit;font:inherit;background:#f3f4ef;border:1px solid #78837d35;border-radius:2px}
+#camera-custom input:focus-visible{outline:2px solid #66796f;outline-offset:2px}
+.controls #camera-input-status{margin:8px 0;line-height:1.6;letter-spacing:0}

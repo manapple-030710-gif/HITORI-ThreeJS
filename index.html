@@ -14,15 +14,39 @@
         <details>
           <summary>環境を調整 <span>＋</span></summary>
           <div class="controls">
-            <p>静かな水面 / OVERCAST</p>
+            <p>静かな水面 / SKY STUDY</p>
+            <label>カメラプリセット <select id="camera-preset"><option value="close">Close / BGM</option><option value="wide">Wide / Ambient</option><option value="custom">Custom</option></select></label>
+            <label>空プリセット <select id="sky-preset"><option>Morning</option><option selected>Overcast</option><option>Evening</option><option>Night</option><option>Custom</option></select></label>
+            <button id="choose-sky-image" type="button">空画像を選択</button>
+            <input id="sky-image" type="file" accept="image/png,image/jpeg,image/webp,.png,.jpg,.jpeg,.webp" hidden>
+            <p id="sky-image-status" role="status">PNG / JPG / WebP</p>
+            <label class="auto-link"><input id="sky-auto-link" type="checkbox" aria-describedby="auto-link-note"> 自動連動</label>
+            <p id="auto-link-note">空画像の色に霧・水面・光を馴染ませます。OFFで手動設定に戻ります。</p>
             <label>光の強さ <output id="light-value"></output><input id="light" type="range" min="0.6" max="1.3" step="0.01"></label>
             <label>水の速さ <output id="speed-value"></output><input id="speed" type="range" min="0" max="0.5" step="0.01"></label>
-            <label>水面の揺らぎ <output id="waves-value"></output><input id="waves" type="range" min="0" max="1" step="0.01"></label>
-            <label class="color">空の色 <input id="sky-color" type="color" aria-label="空の色"></label>
-            <label>霧の開始距離 <output id="fog-start-value"></output><input id="fog-start" type="range" min="0" max="200" step="1"></label>
+            <label>水面の揺らぎ <output id="waves-value"></output><input id="waves" type="range" min="0" max="2.5" step="0.01"></label>
             <label>霧の濃さ <output id="fog-density-value"></output><input id="fog-density" type="range" min="0" max="0.01" step="0.0001"></label>
-            <label class="color">霧の色 <input id="fog-color" type="color" aria-label="霧の色"></label>
+            <label>境界ブレンド幅 <output id="horizon-blend-value" for="horizon-blend"></output><input id="horizon-blend" type="range" min="0" max="2" step="0.05" title="地平線のなじみ幅を調整（度）"></label>
             <button id="reset">初期設定に戻す</button>
+            <details class="advanced-settings">
+              <summary>詳細設定 <span>＋</span></summary>
+              <div id="camera-custom" hidden>
+                <label>Camera X <input id="camera-x" type="number" min="-1000" max="1000" step="any"></label>
+                <label>Camera Y <input id="camera-y" type="number" min="0.3" max="100" step="any"></label>
+                <label>Camera Z <input id="camera-z" type="number" min="-1000" max="1000" step="any"></label>
+                <label>Look At X <input id="look-at-x" type="number" min="-1000" max="1000" step="any"></label>
+                <label>Look At Y <input id="look-at-y" type="number" min="-100" max="100" step="any"></label>
+                <label>Look At Z <input id="look-at-z" type="number" min="-1000" max="1000" step="any"></label>
+                <label>FOV <input id="camera-fov" type="number" min="15" max="90" step="any"></label>
+                <p id="camera-input-status" role="status"></p>
+              </div>
+              <label>地平線サンプル位置 <output id="sky-sample-value" for="sky-sample">55%</output><input id="sky-sample" type="range" min="45" max="80" step="1" value="55"></label>
+              <label class="color">空の色 <input id="sky-color" type="color" aria-label="空の色"></label>
+              <label>水の色補正 <select id="water-color-correction"><option value="none">補正なし</option><option value="soften">色味を弱める</option><option value="white">少し白寄り</option><option value="gray">少し灰寄り</option><option value="blue">少し青寄り</option></select></label>
+              <label class="color">霧の色 <input id="fog-color" type="color" aria-label="霧の色"></label>
+              <label>霧の開始距離 <output id="fog-start-value"></output><input id="fog-start" type="range" min="0" max="200" step="1"></label>
+              <label>時刻 <output id="sky-time-value" for="sky-time">12:00</output><input id="sky-time" type="range" min="0" max="24" step="0.016666666666666666" value="12"></label>
+            </details>
           </div>
         </details>
       </aside>
