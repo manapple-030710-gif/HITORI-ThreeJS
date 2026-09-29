@@ -8,6 +8,10 @@ export function createEnvironment(scene, settings, timeUniform) {
   const uniforms = {
     uZenith: { value: new THREE.Color() }, uHorizon: { value: new THREE.Color() },
     uWaterColor: { value: new THREE.Color() }, uLightDirection: { value: new THREE.Vector3() },
+    uWaterOpacity: { value: settings.water.opacity },
+    uFresnelStrength: { value: settings.water.fresnelStrength },
+    uReflectionStrength: { value: settings.water.reflectionStrength },
+    uDepthTint: { value: settings.water.depthTint },
     uWaterCorrectionMode: { value: 0 },
     uWaterCorrectionColor: { value: new THREE.Color() },
     uLightIntensity: { value: 1 }, uStrength: { value: 0 }, uTime: timeUniform, uRoughness: { value: settings.water.roughness },
@@ -84,6 +88,10 @@ export function createEnvironment(scene, settings, timeUniform) {
     uniforms.uLightIntensity.value = settings.lighting.intensity;
     uniforms.uStrength.value = settings.water.strength;
     uniforms.uRoughness.value = settings.water.roughness;
+    uniforms.uWaterOpacity.value = THREE.MathUtils.clamp(settings.water.opacity, 0, 1);
+    uniforms.uFresnelStrength.value = THREE.MathUtils.clamp(settings.water.fresnelStrength, 0, 1.5);
+    uniforms.uReflectionStrength.value = THREE.MathUtils.clamp(settings.water.reflectionStrength, 0, 1.5);
+    uniforms.uDepthTint.value = THREE.MathUtils.clamp(settings.water.depthTint, 0, 2);
     // 初期値0.75を基準に、揺らぎUIを実際の高さにも連動させます。
     uniforms.uAmplitude.value = settings.water.amplitude * settings.water.strength / 0.75;
     uniforms.uWavelength.value = Math.max(2, settings.water.wavelength);
