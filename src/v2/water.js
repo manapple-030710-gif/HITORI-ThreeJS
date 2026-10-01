@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { skyGLSL } from './sky.js';
-import { waterVertexShader } from '../animation/water-vertex.js';
-import { waterSpectrumGLSL } from '../animation/water-spectrum.js';
+import { waterVertexShader } from './vertex.js';
+import { waterSpectrumGLSL } from './spectrum.js';
 
 // 既存の自動補正量（水色12%、反射18%、光色14%）に掛ける距離係数。
 export const imageColorDepth = {
@@ -13,8 +13,8 @@ export const imageColorDepth = {
 
 // 水面の見た目だけを調整。波の変位・速度・再生状態には触れません。
 const waterAppearance = {
-  bedBrightness: 0.88,
-  opticalDepth: 0.75,
+  bedBrightness: 0.62,
+  opticalDepth: 1.15,
   bedVariation: 0.025,
 };
 
@@ -75,7 +75,7 @@ export function createWater(uniforms) {
       vec3 waterSkyColor(vec3 direction, float weight) {
         return sampleSky(direction, mix(uBaseZenith,uZenith,weight),
           mix(uBaseHorizon,uHorizon,weight), mix(uBaseFogColor,uFogColor,weight),
-          vec3(1.0,0.99,0.96), uLightIntensity) * uEnvironmentGain;
+          mix(uBaseLightColor,uEnvironmentLight,weight), uEnvironmentIntensity) * uEnvironmentGain;
       }
       float hash(vec2 p) {
         vec3 q = fract(vec3(p.xyx)*0.1031);
@@ -100,7 +100,7 @@ export function createWater(uniforms) {
         // Pixel-level medium normals avoid interpolation smoothing across triangles.
         vec3 wave=displacedSpectrum(p,footprint);
         vec3 small=spectrumBand(p,uSmallWaveScale,uSmallWaveSpeed,29.0,9,footprint);
-        float smallFade=1.0-smoothstep(8.0,55.0,distanceToCamera);
+        float smallFade=1.0-smoothstep(12.0,95.0,distanceToCamera);
         vec2 smallSlope=small.yz*uSmallWaveScale*0.10*uSmallWaveStrength
           *smallFade*min(uStrength,2.5);
         vec2 surfaceSlope=wave.yz+smallSlope;
@@ -121,13 +121,18 @@ export function createWater(uniforms) {
         vec3 view=normalize(cameraPosition-vWorld);
         normal=normalize(mix(vec3(0,1,0),normal,smoothstep(0.0,0.04,view.y)));
         float nv=max(dot(normal,view),0.001);
-        vec3 reflected=reflect(-view,normal);
+        // Unresolved facets merge into the existing broad wave normal at distance.
+        vec3 broadNormal=normalize(vec3(-vSwellSlope.x,1.0,-vSwellSlope.y));
+        vec3 reflectionNormal=normalize(mix(normal,broadNormal,
+          smoothstep(25.0,160.0,distanceToCamera)*0.75));
+        reflectionNormal=normalize(mix(vec3(0,1,0),reflectionNormal,0.72));
+        vec3 reflected=reflect(-view,reflectionNormal);
         float roughness=clamp(uRoughness+sqrt(unresolved)*uStrength
           +(broad.x-0.5)*0.035*detailFade*min(uStrength,1.0),0.04,0.65);
         // Integrate a broad sky lobe; unresolved detail becomes roughness, not sparkle.
         vec3 tangent=normalize(cross(abs(reflected.y)>0.99 ? vec3(1,0,0) : vec3(0,1,0),reflected));
         vec3 bitangent=cross(reflected,tangent);
-        float spread=roughness*roughness*2.5;
+        float spread=roughness*roughness*mix(2.7,1.5,uGrandeur);
         float imageWeight=mix(1.0,imageDepthWeight(distanceToCamera),uAutoImageFog);
         if (uWaterCorrectionMode == 1.0) imageWeight*=mix(1.0,0.5,uAutoImageFog);
         vec3 reflection=waterSkyColor(reflected,imageWeight)*0.40;
@@ -135,6 +140,10 @@ export function createWater(uniforms) {
         reflection+=waterSkyColor(normalize(reflected-tangent*spread),imageWeight)*0.15;
         reflection+=waterSkyColor(normalize(reflected+bitangent*spread),imageWeight)*0.15;
         reflection+=waterSkyColor(normalize(reflected-bitangent*spread),imageWeight)*0.15;
+        // A downward reflection ray sees the water layer, not a white sky horizon.
+        float skyVisibility=smoothstep(-0.10,0.10,reflected.y);
+        skyVisibility=mix(skyVisibility,1.0,smoothstep(100.0,500.0,distanceToCamera));
+        reflection*=mix(0.48,1.0,skyVisibility);
         // 空気→水（IOR 1.333）の非偏光Fresnel。既存の粗さと強度UIを維持。
         float waterIOR=1.333;
         float fresnelView=clamp(mix(nv,sqrt(nv),roughness*0.35),0.001,1.0);
@@ -158,7 +167,7 @@ export function createWater(uniforms) {
         vec3 lightTint=mix(uBaseLightColor,uEnvironmentLight,imageWeight);
         float refractedCos=sqrt(1.0-(1.0-nv*nv)/(1.333*1.333));
         float layerDepth=${waterAppearance.opticalDepth}+0.18*(broad.x-0.5)*uStrength;
-        vec3 transmission=exp(-vec3(0.20,0.145,0.12)*layerDepth*uDepthTint/max(refractedCos,0.5));
+        vec3 transmission=exp(-vec3(0.36,0.29,0.25)*layerDepth*uDepthTint/max(refractedCos,0.5));
         float bedDetail=(broad.x-0.5)*${waterAppearance.bedVariation}*detailFade*uStrength;
         vec3 bed=waterTint*(${waterAppearance.bedBrightness}+bedDetail);
         // 擬似コースティクスは水中光の乗算だけ。発光や網目模様は追加しません。
@@ -174,8 +183,11 @@ export function createWater(uniforms) {
         vec3 transmitted=(bed*transmission+waterTint*0.16*(vec3(1.0)-transmission))
           *lightTint*uEnvironmentIntensity*uEnvironmentGain;
         // 法線・波は変えず、材質の反射寄与だけ調整。遠方の反射を控えめに。
-        float reflectionFade=mix(1.0,0.78,smoothstep(35.0,180.0,distanceToCamera));
-        float reflectionWeight=clamp(fresnel*uReflectionStrength*reflectionFade,0.0,1.0);
+        float reflectionFade=mix(1.0,0.78,smoothstep(70.0,600.0,distanceToCamera));
+        // Smith-like visibility removes bright back-facing crests without flattening waves.
+        float facetVisibility=2.0*nv/(nv+sqrt(roughness*roughness+(1.0-roughness*roughness)*nv*nv));
+        facetVisibility=mix(facetVisibility,1.0,smoothstep(60.0,260.0,distanceToCamera));
+        float reflectionWeight=clamp(fresnel*uReflectionStrength*reflectionFade*facetVisibility,0.0,0.94);
         vec3 color=mix(transmitted,reflection,reflectionWeight);
         // 粗さで広げた控えめな方向性ローブ。既存IOR Fresnelをそのまま利用。
         float nl=max(dot(normal,uSpecularDirection),0.0);
@@ -187,8 +199,11 @@ export function createWater(uniforms) {
           vec3 halfDirection=normalize(halfVector);
           float exponent=mix(uSpecularSharpness,8.0,roughness*roughness);
           float lobe=pow(max(dot(specularNormal,halfDirection),0.0),exponent);
-          float specularFade=1.0-smoothstep(30.0,220.0,distanceToCamera);
-          float specular=uSpecularStrength*lobe*nl*fresnel*specularFade;
+          // Resolve broad reflected light separately from the tiny facets, with one light direction.
+          float broadLobe=pow(max(dot(broadNormal,halfDirection),0.0),max(6.0,exponent*0.35));
+          lobe=mix(lobe,broadLobe,0.25*smoothstep(18.0,150.0,distanceToCamera));
+          float specularFade=mix(1.0,0.35,smoothstep(40.0,850.0,distanceToCamera));
+          float specular=uSpecularStrength*lobe*nl*fresnel*specularFade*facetVisibility*3.0;
           float highlightFade=(1.0-smoothstep(30.0,180.0,distanceToCamera))
             *(1.0-smoothstep(0.3,1.0,footprint*uHighlightVariationScale));
           if (uHighlightVariation > 0.0 && highlightFade > 0.0) {
@@ -216,6 +231,16 @@ export function createWater(uniforms) {
         // 遠方ほど採取した地平線色へ戻し、霧の白・灰補正が帯に残るのを抑えます。
         vec3 imageFog=mix(uEnvironmentFog,uImageHorizon,${imageColorDepth.horizonMatch}*smoothstep(0.0,1.0,fogAmount));
         horizon=mix(horizon,imageFog,uAutoImageFog);
+        // Distant information grows in scale: integrate the same sky light above the horizon.
+        // No new wave or animated noise: this is cloud illumination in the existing material.
+        vec3 farDirection=normalize(vec3(-view.x,0.10+22.0/(distanceToCamera+150.0),-view.z));
+        float farCloud=cloudField(farDirection.xz/(0.16+farDirection.y)*1.8+vec2(6.2,9.7));
+        float farLight=skyLightZone(farDirection)
+          *mix(1.0,0.35,smoothstep(0.30,0.72,farCloud)*uCloudAmount);
+        float farResponse=smoothstep(70.0,350.0,distanceToCamera)*(1.0-fogAmount);
+        color*=1.0+farResponse*(0.35*(farCloud-0.5)+0.22*farLight);
+        color+=uEnvironmentLight*uEnvironmentIntensity*uEnvironmentGain
+          *farResponse*farLight*0.14*uReflectionStrength;
         color=mix(color,horizon,fogAmount);
         if (uGeometryProof > 0.5) color = mix(color, vec3(0.05,0.18,0.22), 0.7);
         // 距離霧の濃さとは独立した視角の帯。白を足さず、実際の背景へ合成。
@@ -326,7 +351,7 @@ export function createWaterBed(uniforms) {
         // ごく弱い水中明度の移ろい。強いコースティクスや発光は使いません。
         float shimmer=(bedNoise(p*0.32+vec2(uTime*0.09,-uTime*0.07))-0.5)*0.035*drift;
         bedColor*=1.0+shimmer;
-        gl_FragColor=vec4(bedColor*uEnvironmentLight*uEnvironmentIntensity*uEnvironmentGain*0.85,opacity);
+        gl_FragColor=vec4(bedColor*uEnvironmentLight*uEnvironmentIntensity*uEnvironmentGain*0.62,opacity);
         #include <tonemapping_fragment>
         #include <colorspace_fragment>
       }`,

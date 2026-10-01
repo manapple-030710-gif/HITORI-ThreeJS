@@ -1,11 +1,12 @@
 import * as THREE from 'three';
 import { createSky, applySkyTime, setSkyImage, setSkyPreset } from './sky.js';
 import { createWater, createWaterBed } from './water.js';
-import { deriveSkyEnvironment } from './sky-image-colors.js';
+import { deriveSkyEnvironment } from '../environment/sky-image-colors.js';
 
 
 export function createEnvironment(scene, settings, timeUniform) {
   const uniforms = {
+    uRandomness: { value: 0.65 }, uGrandeur: { value: 0.75 }, uCloudAmount: { value: 0.7 },
     uZenith: { value: new THREE.Color() }, uHorizon: { value: new THREE.Color() },
     uWaterColor: { value: new THREE.Color() }, uLightDirection: { value: new THREE.Vector3() },
     uWaterOpacity: { value: settings.water.opacity },
@@ -91,6 +92,9 @@ export function createEnvironment(scene, settings, timeUniform) {
     uniforms.uWaterCorrectionColor.value.set(correctionColors[correction] || '#ffffff');
     uniforms.uFogColor.value.set(settings.fog.color);
     applySkyTime(sky, settings);
+    uniforms.uZenith.value.copy(uniforms.uEnvironmentZenith.value);
+    uniforms.uHorizon.value.copy(uniforms.uEnvironmentHorizon.value);
+    uniforms.uFogColor.value.copy(uniforms.uEnvironmentFog.value);
     uniforms.uBaseWaterColor.value.copy(uniforms.uWaterColor.value);
     uniforms.uBaseLightColor.value.copy(uniforms.uEnvironmentLight.value);
     uniforms.uBaseZenith.value.copy(uniforms.uZenith.value);
@@ -115,6 +119,9 @@ export function createEnvironment(scene, settings, timeUniform) {
     sunlight.color.copy(uniforms.uEnvironmentLight.value);
   }
   function apply() {
+    uniforms.uRandomness.value=settings.world.randomness;
+    uniforms.uGrandeur.value=settings.world.grandeur;
+    uniforms.uCloudAmount.value=settings.world.clouds;
     uniforms.uLargeWaveStrength.value = THREE.MathUtils.clamp(settings.water.largeWaveStrength, 0, 3);
     uniforms.uLargeWaveScale.value = THREE.MathUtils.clamp(settings.water.largeWaveScale, 3, 30);
     uniforms.uLargeWaveSpeed.value = THREE.MathUtils.clamp(settings.water.largeWaveSpeed, 0, 3);
@@ -177,7 +184,8 @@ export function createEnvironment(scene, settings, timeUniform) {
   }
   apply();
   return {
-    apply, applyTime,
+    apply, applyTime, uniforms,
+    objects: { sky, water: scene.getObjectByName("Multiscale water") },
     setImageColors: colors => { imageColors = colors; applyTime(); },
     setSkyImage: texture => setSkyImage(sky, texture, settings.frame.width / settings.frame.height),
     setSkyPreset: name => setSkyPreset(sky, name),

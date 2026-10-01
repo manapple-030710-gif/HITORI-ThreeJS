@@ -1,0 +1,1085 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HITORI Simulator V2 Preset — current canonical export",
+  "type": "object",
+  "required": [
+    "format",
+    "schemaVersion",
+    "world",
+    "shot"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "format": {
+      "const": "HITORI.SimulatorV2"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "world": {
+      "$ref": "#/$defs/worldPreset"
+    },
+    "shot": {
+      "$ref": "#/$defs/shotPreset"
+    }
+  },
+  "$defs": {
+    "settings": {
+      "type": "object",
+      "properties": {
+        "water": {
+          "type": "object",
+          "properties": {
+            "largeWaveStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 3,
+              "default": 0.6586944000000001,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "大波3成分の高さ・勾配係数。",
+              "x-uiLabel": "largeWaveStrength",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "largeWaveScale": {
+              "type": "number",
+              "minimum": 3,
+              "maximum": 30,
+              "default": 18.759999999999998,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "大波の基準波長（ワールド座標）。",
+              "x-uiLabel": "largeWaveScale",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.1
+            },
+            "largeWaveSpeed": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 3,
+              "default": 0.48,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "大波の局所時間倍率。",
+              "x-uiLabel": "largeWaveSpeed",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "mediumWaveStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 4,
+              "default": 1.9129199999999997,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "中波7成分の高さ・解析勾配係数。",
+              "x-uiLabel": "mediumWaveStrength",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "mediumWaveScale": {
+              "type": "number",
+              "minimum": 0.8,
+              "maximum": 8,
+              "default": 3.642,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "中波の基準波長。",
+              "x-uiLabel": "mediumWaveScale",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.1
+            },
+            "mediumWaveSpeed": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 4,
+              "default": 0.83,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "中波の局所時間倍率。",
+              "x-uiLabel": "mediumWaveSpeed",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "smallWaveStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 4,
+              "default": 1.9907760000000003,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "小波9成分の法線勾配係数。頂点変位には使わない。",
+              "x-uiLabel": "smallWaveStrength",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "smallWaveScale": {
+              "type": "number",
+              "minimum": 0.15,
+              "maximum": 2,
+              "default": 0.7402,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "小波の基準波長。",
+              "x-uiLabel": "smallWaveScale",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "smallWaveSpeed": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 4,
+              "default": 1.23,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "小波法線の局所時間倍率。",
+              "x-uiLabel": "smallWaveSpeed",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "waveDirectionSpread": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2,
+              "default": 1.366,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "角度=0.34+(seed×2π−π)×値。",
+              "x-uiLabel": "waveDirectionSpread",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "waveSpeedVariation": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2,
+              "default": 1.396,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "rate=2^((seed−0.5)×値×1.3)。",
+              "x-uiLabel": "waveSpeedVariation",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "waveSharpness": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.47280000000000005,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "sin位相に−0.26×値×cos(2位相)を混合し正規化。",
+              "x-uiLabel": "waveSharpness",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "specularScatter": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2,
+              "default": 1.338,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "スペキュラ用勾配にsmallSlope×(値−1)を加える。",
+              "x-uiLabel": "specularScatter",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "bottomVisibility": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.55,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "近景の底面透過係数と底面表示ゲート。",
+              "x-uiLabel": "bottomVisibility",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "bottomVariationStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.6,
+              "default": 0.3,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "底面の浅色・深色のノイズ混合率。",
+              "x-uiLabel": "bottomVariationStrength",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "bottomVariationScale": {
+              "type": "number",
+              "minimum": 0.03,
+              "maximum": 0.4,
+              "default": 0.12,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "底面ノイズの空間周波数。波長パラメータではない。",
+              "x-uiLabel": "bottomVariationScale",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "depthFadeStrength": {
+              "type": "number",
+              "minimum": 0.75,
+              "maximum": 2.5,
+              "default": 1,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "底面・透過の距離に掛ける倍率。",
+              "x-uiLabel": "depthFadeStrength",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "depthVariationStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.5,
+              "default": 0.38,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "水中基準色をshallow/deep色へ混合する強度。",
+              "x-uiLabel": "depthVariationStrength",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "depthVariationScale": {
+              "type": "number",
+              "minimum": 0.02,
+              "maximum": 0.3,
+              "default": 0.06,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "静止した仮想深度ノイズの空間周波数。",
+              "x-uiLabel": "depthVariationScale",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "highlightVariation": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.5,
+              "default": 0.18,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "specularを1+(mask−0.5)×値×fadeで乗算。",
+              "x-uiLabel": "highlightVariation",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "highlightVariationScale": {
+              "type": "number",
+              "minimum": 0.03,
+              "maximum": 0.5,
+              "default": 0.13,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "ハイライト用静止ノイズの空間周波数。",
+              "x-uiLabel": "highlightVariationScale",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "causticStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.12,
+              "default": 0.025,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "水中bed色の微弱な明度揺らぎ乗算。実コースティクスではない。",
+              "x-uiLabel": "causticStrength",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.001
+            },
+            "causticScale": {
+              "type": "number",
+              "minimum": 0.1,
+              "maximum": 1.5,
+              "default": 0.45,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "水中明度ドリフトの空間周波数。",
+              "x-uiLabel": "causticScale",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "causticSpeed": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.5,
+              "default": 0.12,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "水中明度ノイズの移動速度係数。",
+              "x-uiLabel": "causticSpeed",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "specularStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.6,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "法線・視線・光方向・Fresnelを使った方向性ハイライトの乗算強度。",
+              "x-uiLabel": "specularStrength",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "specularSharpness": {
+              "type": "number",
+              "minimum": 8,
+              "maximum": 160,
+              "default": 32,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "ローブ指数の基準。実効指数=lerp(値,8,roughness²)。",
+              "x-uiLabel": "specularSharpness",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 1
+            },
+            "lightDirectionX": {
+              "type": "number",
+              "minimum": -1,
+              "maximum": 1,
+              "default": -0.32,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "水の方向性specular用方向ベクトルのX成分。",
+              "x-uiLabel": "lightDirectionX",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "lightDirectionY": {
+              "type": "number",
+              "minimum": -1,
+              "maximum": 1,
+              "default": 0.23556349186104047,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "水の方向性specular用方向ベクトルのY成分。",
+              "x-uiLabel": "lightDirectionY",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "lightDirectionZ": {
+              "type": "number",
+              "minimum": -1,
+              "maximum": 1,
+              "default": -1,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "水の方向性specular用方向ベクトルのZ成分。",
+              "x-uiLabel": "lightDirectionZ",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "microNormalStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.025,
+              "default": 0.01164,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "2層noiseGradientで表面法線だけを微摂動。",
+              "x-uiLabel": "microNormalStrength",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.001
+            },
+            "microNormalScale": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 12,
+              "default": 6,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "微細法線ノイズの空間周波数。",
+              "x-uiLabel": "microNormalScale",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.1
+            },
+            "microNormalSpeed": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.6,
+              "default": 0.31,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "微細法線ノイズの時間移動倍率。",
+              "x-uiLabel": "microNormalSpeed",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.4365,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "近景の底面透過式にある(1−opacity)。単独の全面alphaではない。",
+              "x-uiLabel": "opacity",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "roughness": {
+              "type": "number",
+              "minimum": 0.04,
+              "maximum": 0.65,
+              "default": 0.3,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "空反射の5方向サンプル幅、Fresnel視線補正、スペキュラ指数に使用。",
+              "x-uiLabel": "roughness",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "fresnelStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1.5,
+              "default": 1.05,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "IOR 1.333のFresnel反射率に掛ける倍率。",
+              "x-uiLabel": "fresnelStrength",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "reflectionStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1.5,
+              "default": 1.087,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "反射Weightおよび遠景の広い光加算の倍率。",
+              "x-uiLabel": "reflectionStrength",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "depthTint": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2,
+              "default": 1.0775000000000001,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "exp(−吸収係数×layerDepth×値/refractedCos)の吸収倍率。",
+              "x-uiLabel": "depthTint",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "speed": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2,
+              "default": 0.65,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "settings.water.speed。永続uTimeの進行倍率。",
+              "x-uiLabel": "speed",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "strength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2.5,
+              "default": 0.9768,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "振幅換算、細波法線、micro法線、水中層、底面driftへ使用。",
+              "x-uiLabel": "strength",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            },
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$",
+              "default": "#a5bbc4",
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "x-uiLocation": "独立UIなし（マクロ連動またはPresetのみ）"
+            },
+            "shallowColor": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$",
+              "default": "#bccbd2",
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "仮想浅深マスクの浅側色。",
+              "x-uiLabel": "shallowColor",
+              "x-uiLocation": "Advanced / Debug"
+            },
+            "deepColor": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$",
+              "default": "#76868d",
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "仮想浅深マスクの深側色。",
+              "x-uiLabel": "deepColor",
+              "x-uiLocation": "Advanced / Debug"
+            },
+            "bottomTint": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$",
+              "default": "#adbfc5",
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "実際の底面Planeの基準色。",
+              "x-uiLabel": "bottomTint",
+              "x-uiLocation": "Advanced / Debug"
+            },
+            "amplitude": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.5,
+              "default": 0.09,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "x-uiLocation": "独立UIなし（マクロ連動またはPresetのみ）"
+            },
+            "wavelength": {
+              "type": "number",
+              "minimum": 2,
+              "maximum": 100,
+              "default": 12,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "x-uiLocation": "独立UIなし（マクロ連動またはPresetのみ）"
+            },
+            "colorCorrection": {
+              "enum": [
+                "none",
+                "soften",
+                "white",
+                "gray",
+                "blue"
+              ],
+              "default": "none",
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "x-uiLocation": "独立UIなし（マクロ連動またはPresetのみ）"
+            }
+          },
+          "additionalProperties": true
+        },
+        "sky": {
+          "type": "object",
+          "properties": {
+            "zenith": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$",
+              "default": "#617c92",
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "x-uiLocation": "独立UIなし（マクロ連動またはPresetのみ）"
+            },
+            "horizon": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$",
+              "default": "#c4d1dc",
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "x-uiLocation": "独立UIなし（マクロ連動またはPresetのみ）"
+            },
+            "time": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 24,
+              "default": 15,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "x-uiLocation": "独立UIなし（マクロ連動またはPresetのみ）"
+            }
+          },
+          "additionalProperties": true
+        },
+        "fog": {
+          "type": "object",
+          "properties": {
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$",
+              "default": "#c4d1dc",
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "時刻で夜色#65788dと補間される霧基準色。",
+              "x-uiLabel": "color",
+              "x-uiLocation": "Advanced / Debug"
+            },
+            "density": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.008,
+              "default": 0.00065,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "fogAmount=1−exp(−fogDistance×max(density,0))。",
+              "x-uiLabel": "density",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.0001
+            },
+            "start": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 300,
+              "default": 96.49999999999999,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "距離霧を開始するカメラ距離（ワールド単位）。",
+              "x-uiLabel": "start",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 1
+            },
+            "horizonBlendWidth": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2,
+              "default": 0.22,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "地平線から水面側へ背景合成する視角幅（度）。",
+              "x-uiLabel": "horizonBlendWidth",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            }
+          },
+          "additionalProperties": true
+        },
+        "lighting": {
+          "type": "object",
+          "properties": {
+            "intensity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 3,
+              "default": 1,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "x-uiLocation": "独立UIなし（マクロ連動またはPresetのみ）"
+            },
+            "direction": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": -1,
+                "maximum": 1
+              },
+              "minItems": 3,
+              "maxItems": 3,
+              "default": [
+                -0.32,
+                0.23556349186104047,
+                -1
+              ],
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "x-uiLocation": "独立UIなし（マクロ連動またはPresetのみ）"
+            }
+          },
+          "additionalProperties": true
+        },
+        "rendering": {
+          "type": "object",
+          "properties": {
+            "exposure": {
+              "type": "number",
+              "minimum": 0.01,
+              "maximum": 5,
+              "default": 1.02,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "x-uiLocation": "独立UIなし（マクロ連動またはPresetのみ）"
+            },
+            "environmentIntensity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1.5,
+              "default": 1,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "description": "水の空反射・透過光・底面光、HemisphereLight強度の倍率。",
+              "x-uiLabel": "environmentIntensity",
+              "x-uiLocation": "Advanced / Debug",
+              "x-uiStep": 0.01
+            }
+          },
+          "additionalProperties": true
+        },
+        "world": {
+          "type": "object",
+          "properties": {
+            "randomness": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.72,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "x-uiLocation": "独立UIなし（マクロ連動またはPresetのみ）"
+            },
+            "grandeur": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.82,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "x-uiLocation": "独立UIなし（マクロ連動またはPresetのみ）"
+            },
+            "clouds": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.85,
+              "x-source": "src/v2/preset-json.js: importPreset()/sanitizeGroups(); src/v2/config.js: deriveSettings()",
+              "x-uiLocation": "独立UIなし（マクロ連動またはPresetのみ）"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    },
+    "worldPreset": {
+      "type": "object",
+      "properties": {
+        "macro": {
+          "type": "object",
+          "properties": {
+            "scene": {
+              "enum": [
+                "HITORI Grandeur",
+                "Calm Water",
+                "Open Water",
+                "Deep Mist"
+              ],
+              "default": "HITORI Grandeur",
+              "description": "選択プリセットのマクロ一式を代入し、カメラを再計算し、Advanced上書きを解除する。",
+              "x-uiLabel": "Scene Preset",
+              "x-uiLocation": "通常UI"
+            },
+            "sky": {
+              "enum": [
+                "Silver Break",
+                "Morning",
+                "Overcast",
+                "Evening",
+                "Night"
+              ],
+              "default": "Silver Break",
+              "description": "skyPresetsの上空色・地平線色・雲量・露出係数・霧係数を適用。",
+              "x-uiLabel": "Sky Preset",
+              "x-uiLocation": "通常UI"
+            },
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$",
+              "default": "#a5bbc4",
+              "description": "水の基準色を設定。shallowColor、deepColor、bottomTintも線形RGBで派生。",
+              "x-uiLabel": "Water Color",
+              "x-uiLocation": "通常UI"
+            },
+            "height": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.56,
+              "description": "strength、large/medium/smallWaveStrength、waveSharpnessを同時に変更。",
+              "x-uiLabel": "Wave Height",
+              "x-uiLocation": "通常UI",
+              "x-uiStep": 0.01
+            },
+            "speed": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2,
+              "default": 0.65,
+              "description": "永続uTimeの進行倍率。各波層の速度比は維持。",
+              "x-uiLabel": "Water Speed",
+              "x-uiLocation": "通常UI",
+              "x-uiStep": 0.01
+            },
+            "randomness": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.72,
+              "description": "波長分布幅、位相オフセット、局所振幅と方向・速度分散、medium/small強度、specularScatter、microNormalStrengthを変更。",
+              "x-uiLabel": "Randomness",
+              "x-uiLocation": "通常UI",
+              "x-uiStep": 0.01
+            },
+            "grandeur": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.82,
+              "description": "各波層の基準波長、large比率、霧開始距離、波の距離減衰、反射サンプル幅・強度へ連動。",
+              "x-uiLabel": "Water Scale / Grandeur",
+              "x-uiLocation": "通常UI",
+              "x-uiStep": 0.01
+            },
+            "clarity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1,
+              "default": 0.55,
+              "description": "opacity=lerp(0.75,0.18,c)、bottomVisibility=c、depthTint=lerp(1.6,0.65,c)。",
+              "x-uiLabel": "Clarity / Transparency",
+              "x-uiLocation": "通常UI",
+              "x-uiStep": 0.01
+            },
+            "time": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 24,
+              "default": 15,
+              "description": "sin((time−6)/12×π)をsmoothstep(−0.2,0.35)で昼光係数に変換。空・霧・光色と光量、光方向Yへ反映。時計の自動進行はない。",
+              "x-uiLabel": "Time / Light",
+              "x-uiLocation": "通常UI",
+              "x-uiStep": 0.05
+            }
+          },
+          "additionalProperties": true
+        },
+        "settings": {
+          "$ref": "#/$defs/settings"
+        },
+        "advanced": {
+          "$ref": "#/$defs/settings"
+        },
+        "skyImage": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dataUrl": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "pattern": "^data:image/(png|jpeg|webp);base64,[a-zA-Z0-9+/=\\r\\n]+$",
+                  "default": null
+                },
+                "name": {
+                  "type": "string",
+                  "maxLength": 255,
+                  "default": ""
+                },
+                "autoLink": {
+                  "type": "boolean",
+                  "default": true
+                },
+                "sampleY": {
+                  "type": "number",
+                  "minimum": 0.45,
+                  "maximum": 0.8,
+                  "default": 0.55,
+                  "x-uiStep": 0.01
+                }
+              },
+              "additionalProperties": true
+            }
+          ]
+        }
+      },
+      "additionalProperties": true,
+      "description": "環境マクロ、基礎実効設定、Advanced上書き、空画像。カメラと正規実効露出はshot。"
+    },
+    "shotPreset": {
+      "type": "object",
+      "properties": {
+        "cameraPreset": {
+          "enum": [
+            "Grandeur",
+            "Close",
+            "Wide"
+          ],
+          "default": "Grandeur"
+        },
+        "framing": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "default": 0.5
+        },
+        "camera": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "number",
+              "minimum": -100,
+              "maximum": 100,
+              "default": 0,
+              "description": "カメラ位置Xのみ変更。注視点は固定。",
+              "x-uiLabel": "左右 / Camera X",
+              "x-uiStep": 0.1
+            },
+            "height": {
+              "type": "number",
+              "minimum": 0.6,
+              "maximum": 40,
+              "default": 5.5,
+              "description": "カメラ位置Yのみ変更。注視点は固定。",
+              "x-uiLabel": "高さ / Camera Height",
+              "x-uiStep": 0.1
+            },
+            "distance": {
+              "type": "number",
+              "minimum": -40,
+              "maximum": 200,
+              "default": 15,
+              "description": "カメラ位置Zのみ変更。注視点からの距離そのものではない。",
+              "x-uiLabel": "前後 / Camera Z",
+              "x-uiStep": 0.1
+            },
+            "fov": {
+              "type": "number",
+              "minimum": 20,
+              "maximum": 90,
+              "default": 54,
+              "description": "PerspectiveCameraの垂直FOV（度）。",
+              "x-uiLabel": "FOV",
+              "x-uiStep": 1
+            },
+            "target": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": -20000,
+                "maximum": 20000
+              },
+              "minItems": 3,
+              "maxItems": 3,
+              "default": [
+                0,
+                1.7000000000000002,
+                -80
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "exposure": {
+          "type": "object",
+          "properties": {
+            "macro": {
+              "type": "number",
+              "minimum": 0.3,
+              "maximum": 1.8,
+              "default": 1
+            },
+            "effective": {
+              "type": "number",
+              "minimum": 0.01,
+              "maximum": 5,
+              "default": 1.02
+            }
+          },
+          "additionalProperties": true
+        },
+        "animation": {
+          "type": "object",
+          "properties": {
+            "time": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1000000000,
+              "default": 0
+            },
+            "paused": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true,
+      "description": "実カメラ、露出、再生位相と停止状態。将来Shot Presetとして参照可能。"
+    }
+  },
+  "description": "現在のexportPreset()形式。worldとshotを分離した保存構造。runtimeの寛容な旧形式Import/値補正は設定仕様書を参照。",
+  "$comment": "UI・内部設定・Presetの変更時にはHITORI_SimulatorV2_設定仕様.mdと本ファイルを同時更新。stepは説明用annotationでありImportは量子化しない。",
+  "x-uiSettingCount": 65,
+  "x-normalUISettingCount": 15,
+  "x-advancedUISettingCount": 50,
+  "examples": [
+    {
+      "format": "HITORI.SimulatorV2",
+      "schemaVersion": 1,
+      "world": {
+        "macro": {
+          "scene": "HITORI Grandeur",
+          "height": 0.56,
+          "speed": 0.65,
+          "randomness": 0.72,
+          "grandeur": 0.82,
+          "clarity": 0.55,
+          "sky": "Silver Break",
+          "time": 15,
+          "color": "#a5bbc4"
+        },
+        "settings": {
+          "sky": {
+            "zenith": "#617c92",
+            "horizon": "#c4d1dc",
+            "time": 15
+          },
+          "water": {
+            "color": "#a5bbc4",
+            "colorCorrection": "none",
+            "speed": 0.65,
+            "strength": 0.9768,
+            "roughness": 0.3,
+            "opacity": 0.4365,
+            "fresnelStrength": 1.05,
+            "reflectionStrength": 1.087,
+            "depthTint": 1.0775000000000001,
+            "specularStrength": 0.6,
+            "specularSharpness": 32,
+            "lightDirectionX": -0.32,
+            "lightDirectionY": 0.23556349186104047,
+            "lightDirectionZ": -1,
+            "microNormalStrength": 0.01164,
+            "microNormalScale": 6,
+            "microNormalSpeed": 0.31,
+            "shallowColor": "#bccbd2",
+            "deepColor": "#76868d",
+            "depthVariationStrength": 0.38,
+            "depthVariationScale": 0.06,
+            "highlightVariation": 0.18,
+            "highlightVariationScale": 0.13,
+            "causticStrength": 0.025,
+            "causticScale": 0.45,
+            "causticSpeed": 0.12,
+            "bottomVisibility": 0.55,
+            "bottomTint": "#adbfc5",
+            "bottomVariationStrength": 0.3,
+            "bottomVariationScale": 0.12,
+            "depthFadeStrength": 1,
+            "amplitude": 0.09,
+            "wavelength": 12,
+            "largeWaveStrength": 0.6586944000000001,
+            "largeWaveScale": 18.759999999999998,
+            "largeWaveSpeed": 0.48,
+            "mediumWaveStrength": 1.9129199999999997,
+            "mediumWaveScale": 3.642,
+            "mediumWaveSpeed": 0.83,
+            "smallWaveStrength": 1.9907760000000003,
+            "smallWaveScale": 0.7402,
+            "smallWaveSpeed": 1.23,
+            "waveDirectionSpread": 1.366,
+            "waveSpeedVariation": 1.396,
+            "waveSharpness": 0.47280000000000005,
+            "specularScatter": 1.338
+          },
+          "fog": {
+            "color": "#c4d1dc",
+            "start": 96.49999999999999,
+            "density": 0.00065,
+            "horizonBlendWidth": 0.22
+          },
+          "lighting": {
+            "intensity": 1,
+            "direction": [
+              -0.32,
+              0.23556349186104047,
+              -1
+            ]
+          },
+          "rendering": {
+            "environmentIntensity": 1
+          },
+          "world": {
+            "randomness": 0.72,
+            "grandeur": 0.82,
+            "clouds": 0.85
+          }
+        },
+        "advanced": {},
+        "skyImage": {
+          "dataUrl": null,
+          "name": "",
+          "autoLink": true,
+          "sampleY": 0.55
+        }
+      },
+      "shot": {
+        "cameraPreset": "Grandeur",
+        "framing": 0.5,
+        "camera": {
+          "x": 0,
+          "height": 5.5,
+          "distance": 15,
+          "fov": 54,
+          "target": [
+            0,
+            1.7000000000000002,
+            -80
+          ]
+        },
+        "exposure": {
+          "macro": 1,
+          "effective": 1.02
+        },
+        "animation": {
+          "time": 0,
+          "paused": false
+        }
+      }
+    }
+  ]
+}

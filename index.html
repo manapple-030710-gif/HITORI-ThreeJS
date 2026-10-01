@@ -30,6 +30,24 @@
             <button id="reset">初期設定に戻す</button>
             <details class="advanced-settings">
               <summary>詳細設定 <span>＋</span></summary>
+              <details class="advanced-settings">
+                <summary>波の流れ <span>＋</span></summary>
+                <label>大波の強さ <output id="large-wave-strength-value"></output><input id="large-wave-strength" type="range" min="0" max="3" step="0.01"></label>
+                <label>大波の波長 <output id="large-wave-scale-value"></output><input id="large-wave-scale" type="range" min="3" max="30" step="0.1"></label>
+                <label>大波の速さ <output id="large-wave-speed-value"></output><input id="large-wave-speed" type="range" min="0" max="3" step="0.01"></label>
+                <label>中波の強さ <output id="medium-wave-strength-value"></output><input id="medium-wave-strength" type="range" min="0" max="4" step="0.01"></label>
+                <label>中波の波長 <output id="medium-wave-scale-value"></output><input id="medium-wave-scale" type="range" min="0.8" max="8" step="0.1"></label>
+                <label>中波の速さ <output id="medium-wave-speed-value"></output><input id="medium-wave-speed" type="range" min="0" max="4" step="0.01"></label>
+                <label>小波の強さ <output id="small-wave-strength-value"></output><input id="small-wave-strength" type="range" min="0" max="4" step="0.01"></label>
+                <label>小波の波長 <output id="small-wave-scale-value"></output><input id="small-wave-scale" type="range" min="0.15" max="2" step="0.01"></label>
+                <label>小波の速さ <output id="small-wave-speed-value"></output><input id="small-wave-speed" type="range" min="0" max="4" step="0.01"></label>
+                <label>方向の広がり <output id="direction-spread-value"></output><input id="direction-spread" type="range" min="0" max="2" step="0.01"></label>
+                <label>速度のばらつき <output id="wave-speed-variation-value"></output><input id="wave-speed-variation" type="range" min="0" max="2" step="0.01"></label>
+                <label>波頭の鋭さ <output id="wave-sharpness-value"></output><input id="wave-sharpness" type="range" min="0" max="1" step="0.01"></label>
+                <label>反射面の散り <output id="specular-scatter-value"></output><input id="specular-scatter" type="range" min="0" max="2" step="0.01"></label>
+              </details>
+              <label>露出 <output id="exposure-value"></output><input id="exposure" type="range" min="0.5" max="1.5" step="0.01"></label>
+              <label>環境光の強さ <output id="environment-intensity-value"></output><input id="environment-intensity" type="range" min="0" max="1.5" step="0.01"></label>
               <div id="camera-custom" hidden>
                 <label>Camera X <input id="camera-x" type="number" min="-1000" max="1000" step="any"></label>
                 <label>Camera Y <input id="camera-y" type="number" min="0.3" max="100" step="any"></label>
@@ -45,6 +63,34 @@
               <label>水の色補正 <select id="water-color-correction"><option value="none">補正なし</option><option value="soften">色味を弱める</option><option value="white">少し白寄り</option><option value="gray">少し灰寄り</option><option value="blue">少し青寄り</option></select></label>
               <details class="advanced-settings">
                 <summary>水の材質 <span>＋</span></summary>
+                <details class="advanced-settings">
+                  <summary>仮の水底 <span>＋</span></summary>
+                  <label>底の見え方 <output id="bottom-visibility-value"></output><input id="bottom-visibility" type="range" min="0" max="1" step="0.01"></label>
+                  <label class="color">底の色 <input id="bottom-tint" type="color" aria-label="底の色"></label>
+                  <label>底の明暗差 <output id="bottom-variation-strength-value"></output><input id="bottom-variation-strength" type="range" min="0" max="0.6" step="0.01"></label>
+                  <label>底の明暗の密度 <output id="bottom-variation-scale-value"></output><input id="bottom-variation-scale" type="range" min="0.03" max="0.4" step="0.01"></label>
+                  <label>底の遠景減衰 <output id="depth-fade-strength-value"></output><input id="depth-fade-strength" type="range" min="0.75" max="2.5" step="0.01"></label>
+                </details>
+                <details class="advanced-settings">
+                  <summary>浅深・局所変化 <span>＋</span></summary>
+                  <label class="color">浅い水の色 <input id="shallow-color" type="color" aria-label="浅い水の色"></label>
+                  <label class="color">深い水の色 <input id="deep-color" type="color" aria-label="深い水の色"></label>
+                  <label>浅深色差の強さ <output id="depth-variation-strength-value"></output><input id="depth-variation-strength" type="range" min="0" max="0.5" step="0.01"></label>
+                  <label>浅深色差の密度 <output id="depth-variation-scale-value"></output><input id="depth-variation-scale" type="range" min="0.02" max="0.3" step="0.01"></label>
+                  <label>ハイライトのムラ <output id="highlight-variation-value"></output><input id="highlight-variation" type="range" min="0" max="0.5" step="0.01"></label>
+                  <label>ハイライトのムラの密度 <output id="highlight-variation-scale-value"></output><input id="highlight-variation-scale" type="range" min="0.03" max="0.5" step="0.01"></label>
+                  <label>水中の明度揺らぎ <output id="caustic-strength-value"></output><input id="caustic-strength" type="range" min="0" max="0.12" step="0.001"></label>
+                  <label>水中の明度揺らぎの密度 <output id="caustic-scale-value"></output><input id="caustic-scale" type="range" min="0.1" max="1.5" step="0.01"></label>
+                  <label>水中の明度揺らぎの速さ <output id="caustic-speed-value"></output><input id="caustic-speed" type="range" min="0" max="0.5" step="0.01"></label>
+                </details>
+                <label>ハイライトの強さ <output id="specular-strength-value"></output><input id="specular-strength" type="range" min="0" max="1" step="0.01"></label>
+                <label>ハイライトの鋭さ <output id="specular-sharpness-value"></output><input id="specular-sharpness" type="range" min="8" max="160" step="1"></label>
+                <label>水面の光方向 X <output id="light-direction-x-value"></output><input id="light-direction-x" type="range" min="-1" max="1" step="0.01"></label>
+                <label>水面の光方向 Y <output id="light-direction-y-value"></output><input id="light-direction-y" type="range" min="-1" max="1" step="0.01"></label>
+                <label>水面の光方向 Z <output id="light-direction-z-value"></output><input id="light-direction-z" type="range" min="-1" max="1" step="0.01"></label>
+                <label>微細な揺らぎの強さ <output id="micro-normal-strength-value"></output><input id="micro-normal-strength" type="range" min="0" max="0.025" step="0.001"></label>
+                <label>微細な揺らぎの密度 <output id="micro-normal-scale-value"></output><input id="micro-normal-scale" type="range" min="1" max="12" step="0.1"></label>
+                <label>微細な揺らぎの速さ <output id="micro-normal-speed-value"></output><input id="micro-normal-speed" type="range" min="0" max="0.6" step="0.01"></label>
                 <label class="color">水の色 <input id="water-color" type="color" aria-label="水の色"></label>
                 <label>近景の不透明度 <output id="water-opacity-value"></output><input id="water-opacity" type="range" min="0" max="1" step="0.01"></label>
                 <label>表面の粗さ <output id="water-roughness-value"></output><input id="water-roughness" type="range" min="0.04" max="0.65" step="0.01"></label>
@@ -63,6 +109,6 @@
     </div>
     <button id="restore" hidden>操作を表示 [H]</button>
     <div id="error" role="alert" hidden></div>
-    <script type="module" src="/src/main.js"></script>
+    <script type="module" src="/src/entry.js"></script>
   </body>
 </html>
