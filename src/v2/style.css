@@ -1,0 +1,18 @@
+.simulator-v2{background:#8596a3;color:#293c49}
+.simulator-v2 header{top:30px;left:32px;color:#344956;text-shadow:0 1px 10px #ffffff44}
+.simulator-v2 .subtitle{color:#536774}
+.versions{position:fixed;top:65px;left:32px;display:flex;gap:16px;font-size:10px;letter-spacing:.08em}
+.versions a{color:#536774;text-decoration:none}.versions span{color:#344956;border-bottom:1px solid #536774;padding-bottom:5px}
+.simulator-v2 aside{right:28px;top:28px;width:258px;max-height:calc(100dvh - 106px)}
+.simulator-v2 details{background:#e6eceee8;border-color:#ffffff50;border-radius:6px;backdrop-filter:blur(18px)}
+.simulator-v2 .controls{padding:0 18px 16px}
+.simulator-v2 .controls h2{font-size:9px;font-weight:500;text-transform:uppercase;letter-spacing:.19em;color:#778993;border-top:1px solid #7d8d9928;padding-top:16px;margin:15px 0 9px}
+.simulator-v2 label{font-size:10px;margin:13px 0}.simulator-v2 input[type=range]{margin-top:10px;accent-color:#5a7688}
+.simulator-v2 .controls select{font-size:11px;padding:7px;margin-top:7px;background:#f4f7f8b5}
+.simulator-v2 .advanced-settings{background:none;border:0;border-top:1px solid #7d8d9928;backdrop-filter:none}
+.simulator-v2 .controls p{line-height:1.7;letter-spacing:0;margin:8px 0}
+.simulator-v2 input[type=file]{font-size:10px;max-width:100%;margin-top:10px}
+.scene-caption{position:fixed;left:32px;bottom:100px;color:#e4ebef;text-shadow:0 1px 12px #182b3c77;pointer-events:none}
+.scene-caption span{font-size:9px;letter-spacing:.19em}.scene-caption p{font-family:Georgia,serif;font-size:22px;font-weight:normal;margin:12px 0}
+.simulator-v2 footer{left:32px;right:28px;bottom:25px}.simulator-v2 footer>span{color:#d3dfe5}.simulator-v2 button{background:#e8eef0bd}
+@media(max-width:700px){.simulator-v2 aside{width:226px;right:15px;top:100px}.scene-caption{display:none}.versions{top:58px}.simulator-v2 footer{left:18px}}

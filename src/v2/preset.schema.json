@@ -1,0 +1,550 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "HITORI Simulator V2 Preset",
+  "type": "object",
+  "required": [
+    "format",
+    "schemaVersion",
+    "world",
+    "shot"
+  ],
+  "additionalProperties": true,
+  "properties": {
+    "format": {
+      "const": "HITORI.SimulatorV2"
+    },
+    "schemaVersion": {
+      "const": 1
+    },
+    "world": {
+      "type": "object",
+      "properties": {
+        "macro": {
+          "type": "object",
+          "properties": {
+            "scene": {
+              "enum": [
+                "HITORI Grandeur",
+                "Calm Water",
+                "Open Water",
+                "Deep Mist"
+              ]
+            },
+            "sky": {
+              "enum": [
+                "Silver Break",
+                "Morning",
+                "Overcast",
+                "Evening",
+                "Night"
+              ]
+            },
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "height": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "speed": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2
+            },
+            "randomness": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "grandeur": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "clarity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "time": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 24
+            }
+          },
+          "additionalProperties": true
+        },
+        "settings": {
+          "$ref": "#/$defs/settings"
+        },
+        "advanced": {
+          "$ref": "#/$defs/settings"
+        },
+        "skyImage": {
+          "anyOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "properties": {
+                "dataUrl": {
+                  "type": [
+                    "string",
+                    "null"
+                  ],
+                  "pattern": "^data:image/(png|jpeg|webp);base64,"
+                },
+                "name": {
+                  "type": "string"
+                },
+                "autoLink": {
+                  "type": "boolean"
+                },
+                "sampleY": {
+                  "type": "number",
+                  "minimum": 0.45,
+                  "maximum": 0.8
+                }
+              },
+              "additionalProperties": true
+            }
+          ]
+        }
+      },
+      "additionalProperties": true
+    },
+    "shot": {
+      "type": "object",
+      "properties": {
+        "cameraPreset": {
+          "enum": [
+            "Grandeur",
+            "Close",
+            "Wide"
+          ]
+        },
+        "framing": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "camera": {
+          "type": "object",
+          "properties": {
+            "x": {
+              "type": "number",
+              "minimum": -100,
+              "maximum": 100
+            },
+            "height": {
+              "type": "number",
+              "minimum": 0.6,
+              "maximum": 40
+            },
+            "distance": {
+              "type": "number",
+              "minimum": -40,
+              "maximum": 200
+            },
+            "fov": {
+              "type": "number",
+              "minimum": 20,
+              "maximum": 90
+            },
+            "target": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": -20000,
+                "maximum": 20000
+              },
+              "minItems": 3,
+              "maxItems": 3
+            }
+          },
+          "additionalProperties": true
+        },
+        "exposure": {
+          "type": "object",
+          "properties": {
+            "macro": {
+              "type": "number",
+              "minimum": 0.3,
+              "maximum": 1.8
+            },
+            "effective": {
+              "type": "number",
+              "minimum": 0.01,
+              "maximum": 5
+            }
+          },
+          "additionalProperties": true
+        },
+        "animation": {
+          "type": "object",
+          "properties": {
+            "time": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1000000000
+            },
+            "paused": {
+              "type": "boolean"
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  },
+  "$defs": {
+    "settings": {
+      "type": "object",
+      "properties": {
+        "water": {
+          "type": "object",
+          "properties": {
+            "largeWaveStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "largeWaveScale": {
+              "type": "number",
+              "minimum": 3,
+              "maximum": 30
+            },
+            "largeWaveSpeed": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "mediumWaveStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 4
+            },
+            "mediumWaveScale": {
+              "type": "number",
+              "minimum": 0.8,
+              "maximum": 8
+            },
+            "mediumWaveSpeed": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 4
+            },
+            "smallWaveStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 4
+            },
+            "smallWaveScale": {
+              "type": "number",
+              "minimum": 0.15,
+              "maximum": 2
+            },
+            "smallWaveSpeed": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 4
+            },
+            "waveDirectionSpread": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2
+            },
+            "waveSpeedVariation": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2
+            },
+            "waveSharpness": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "specularScatter": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2
+            },
+            "bottomVisibility": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "bottomVariationStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.6
+            },
+            "bottomVariationScale": {
+              "type": "number",
+              "minimum": 0.03,
+              "maximum": 0.4
+            },
+            "depthFadeStrength": {
+              "type": "number",
+              "minimum": 0.75,
+              "maximum": 2.5
+            },
+            "depthVariationStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.5
+            },
+            "depthVariationScale": {
+              "type": "number",
+              "minimum": 0.02,
+              "maximum": 0.3
+            },
+            "highlightVariation": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.5
+            },
+            "highlightVariationScale": {
+              "type": "number",
+              "minimum": 0.03,
+              "maximum": 0.5
+            },
+            "causticStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.12
+            },
+            "causticScale": {
+              "type": "number",
+              "minimum": 0.1,
+              "maximum": 1.5
+            },
+            "causticSpeed": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.5
+            },
+            "specularStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "specularSharpness": {
+              "type": "number",
+              "minimum": 8,
+              "maximum": 160
+            },
+            "lightDirectionX": {
+              "type": "number",
+              "minimum": -1,
+              "maximum": 1
+            },
+            "lightDirectionY": {
+              "type": "number",
+              "minimum": -1,
+              "maximum": 1
+            },
+            "lightDirectionZ": {
+              "type": "number",
+              "minimum": -1,
+              "maximum": 1
+            },
+            "microNormalStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.025
+            },
+            "microNormalScale": {
+              "type": "number",
+              "minimum": 1,
+              "maximum": 12
+            },
+            "microNormalSpeed": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.6
+            },
+            "opacity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "roughness": {
+              "type": "number",
+              "minimum": 0.04,
+              "maximum": 0.65
+            },
+            "fresnelStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1.5
+            },
+            "reflectionStrength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1.5
+            },
+            "depthTint": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2
+            },
+            "speed": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2
+            },
+            "strength": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2.5
+            },
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "shallowColor": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "deepColor": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "bottomTint": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "amplitude": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.5
+            },
+            "wavelength": {
+              "type": "number",
+              "minimum": 2,
+              "maximum": 100
+            },
+            "colorCorrection": {
+              "enum": [
+                "none",
+                "soften",
+                "white",
+                "gray",
+                "blue"
+              ]
+            }
+          },
+          "additionalProperties": true
+        },
+        "sky": {
+          "type": "object",
+          "properties": {
+            "zenith": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "horizon": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "time": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 24
+            }
+          },
+          "additionalProperties": true
+        },
+        "fog": {
+          "type": "object",
+          "properties": {
+            "color": {
+              "type": "string",
+              "pattern": "^#[0-9a-fA-F]{6}$"
+            },
+            "density": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 0.008
+            },
+            "start": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 300
+            },
+            "horizonBlendWidth": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 2
+            }
+          },
+          "additionalProperties": true
+        },
+        "lighting": {
+          "type": "object",
+          "properties": {
+            "intensity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 3
+            },
+            "direction": {
+              "type": "array",
+              "items": {
+                "type": "number",
+                "minimum": -1,
+                "maximum": 1
+              },
+              "minItems": 3,
+              "maxItems": 3
+            }
+          },
+          "additionalProperties": true
+        },
+        "rendering": {
+          "type": "object",
+          "properties": {
+            "exposure": {
+              "type": "number",
+              "minimum": 0.01,
+              "maximum": 5
+            },
+            "environmentIntensity": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1.5
+            }
+          },
+          "additionalProperties": true
+        },
+        "world": {
+          "type": "object",
+          "properties": {
+            "randomness": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "grandeur": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            },
+            "clouds": {
+              "type": "number",
+              "minimum": 0,
+              "maximum": 1
+            }
+          },
+          "additionalProperties": true
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

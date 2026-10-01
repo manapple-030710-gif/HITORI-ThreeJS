@@ -12,7 +12,8 @@ try {
   renderer.setPixelRatio(1);
   renderer.setSize(settings.frame.width, settings.frame.height, false);
   renderer.outputColorSpace = THREE.SRGBColorSpace;
-  renderer.toneMapping = THREE.NoToneMapping;
+  renderer.toneMapping = THREE.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = settings.rendering.exposure;
   stage.appendChild(renderer.domElement);
   const scene = new THREE.Scene();
   const camera = new THREE.PerspectiveCamera(settings.camera.fov, 16 / 9, 0.1, 20000);
@@ -83,6 +84,40 @@ try {
   document.addEventListener('visibilitychange', () => animation.resetClock());
   animationId = requestAnimationFrame(draw);
   const bindings = [
+    ['large-wave-strength', settings.water, 'largeWaveStrength', 2],
+    ['large-wave-scale', settings.water, 'largeWaveScale', 1],
+    ['large-wave-speed', settings.water, 'largeWaveSpeed', 2],
+    ['medium-wave-strength', settings.water, 'mediumWaveStrength', 2],
+    ['medium-wave-scale', settings.water, 'mediumWaveScale', 1],
+    ['medium-wave-speed', settings.water, 'mediumWaveSpeed', 2],
+    ['small-wave-strength', settings.water, 'smallWaveStrength', 2],
+    ['small-wave-scale', settings.water, 'smallWaveScale', 2],
+    ['small-wave-speed', settings.water, 'smallWaveSpeed', 2],
+    ['direction-spread', settings.water, 'waveDirectionSpread', 2],
+    ['wave-speed-variation', settings.water, 'waveSpeedVariation', 2],
+    ['wave-sharpness', settings.water, 'waveSharpness', 2],
+    ['specular-scatter', settings.water, 'specularScatter', 2],
+    ['bottom-visibility', settings.water, 'bottomVisibility', 2],
+    ['bottom-variation-strength', settings.water, 'bottomVariationStrength', 2],
+    ['bottom-variation-scale', settings.water, 'bottomVariationScale', 2],
+    ['depth-fade-strength', settings.water, 'depthFadeStrength', 2],
+    ['depth-variation-strength', settings.water, 'depthVariationStrength', 2],
+    ['depth-variation-scale', settings.water, 'depthVariationScale', 2],
+    ['highlight-variation', settings.water, 'highlightVariation', 2],
+    ['highlight-variation-scale', settings.water, 'highlightVariationScale', 2],
+    ['caustic-strength', settings.water, 'causticStrength', 3],
+    ['caustic-scale', settings.water, 'causticScale', 2],
+    ['caustic-speed', settings.water, 'causticSpeed', 2],
+    ['specular-strength', settings.water, 'specularStrength', 2],
+    ['specular-sharpness', settings.water, 'specularSharpness', 0],
+    ['light-direction-x', settings.water, 'lightDirectionX', 2],
+    ['light-direction-y', settings.water, 'lightDirectionY', 2],
+    ['light-direction-z', settings.water, 'lightDirectionZ', 2],
+    ['micro-normal-strength', settings.water, 'microNormalStrength', 3],
+    ['micro-normal-scale', settings.water, 'microNormalScale', 1],
+    ['micro-normal-speed', settings.water, 'microNormalSpeed', 2],
+    ['exposure', settings.rendering, 'exposure', 2],
+    ['environment-intensity', settings.rendering, 'environmentIntensity', 2],
     ['water-opacity', settings.water, 'opacity', 2],
     ['water-roughness', settings.water, 'roughness', 2],
     ['water-fresnel', settings.water, 'fresnelStrength', 2],
@@ -196,8 +231,12 @@ try {
     environment.applyTime();
   });
   function sync() {
+    renderer.toneMappingExposure = settings.rendering.exposure;
     syncTime();
     document.querySelector('#water-color').value = settings.water.color;
+    document.querySelector('#bottom-tint').value = settings.water.bottomTint;
+    document.querySelector('#shallow-color').value = settings.water.shallowColor;
+    document.querySelector('#deep-color').value = settings.water.deepColor;
     waterCorrection.value = settings.water.colorCorrection;
     for (const [id, object, key, precision] of bindings) {
       document.getElementById(id).value = object[key];
@@ -216,6 +255,9 @@ try {
   });
   document.querySelector('#fog-color').addEventListener('input', event => { settings.fog.color = event.target.value; sync(); });
   document.querySelector('#water-color').addEventListener('input', event => { settings.water.color = event.target.value; sync(); });
+  document.querySelector('#bottom-tint').addEventListener('input', event => { settings.water.bottomTint = event.target.value; sync(); });
+  document.querySelector('#shallow-color').addEventListener('input', event => { settings.water.shallowColor = event.target.value; sync(); });
+  document.querySelector('#deep-color').addEventListener('input', event => { settings.water.deepColor = event.target.value; sync(); });
   document.querySelector('#reset').onclick = () => {
     Object.assign(settings.camera, structuredClone(defaults.camera));
     customCamera = structuredClone(defaults.camera);
@@ -227,7 +269,7 @@ try {
     autoLink.checked = false;
     sampleSlider.value = '55';
     updateImageColors();
-    for (const key of ['sky', 'lighting', 'water', 'fog']) Object.assign(settings[key], structuredClone(defaults[key]));
+    for (const key of ['sky', 'lighting', 'water', 'fog', 'rendering']) Object.assign(settings[key], structuredClone(defaults[key]));
     sync();
   };
   document.querySelector('#pause').onclick = event => {

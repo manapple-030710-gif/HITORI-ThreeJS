@@ -1,4 +1,4 @@
-import { waterSpectrumGLSL } from './water-spectrum.js';
+import { waterSpectrumGLSL } from './spectrum.js';
 
 export const waterVertexShader = `${waterSpectrumGLSL}
 varying vec3 vWorld;
